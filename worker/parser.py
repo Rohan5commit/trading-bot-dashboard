@@ -8,6 +8,8 @@ logger = logging.getLogger(__name__)
 STRATEGY_MAP = {
     "(Core)": {"name": "trading_bot_core", "display_name": "Trading Bot Core"},
     "(AI)": {"name": "trading_bot_ai", "display_name": "Trading Bot AI"},
+    "kalshi sports bot": {"name": "kalshi_sports_bot", "display_name": "Kalshi Sports Bot"},
+    "kronos report": {"name": "kronos", "display_name": "Kronos"},
     "(Momentum)": {"name": "trading_bot_momentum", "display_name": "Trading Bot Momentum"},
     "(Value)": {"name": "trading_bot_value", "display_name": "Trading Bot Value"},
     "(Scalp)": {"name": "trading_bot_scalp", "display_name": "Trading Bot Scalp"},
