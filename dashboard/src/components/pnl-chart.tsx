@@ -53,11 +53,11 @@ export function PnlChart({ reports }: Props) {
                 tickFormatter={(v: number) => `$${v.toLocaleString()}`}
               />
               <Tooltip
-                formatter={(value: number) => [
-                  `$${value.toLocaleString(undefined, { minimumFractionDigits: 2 })}`,
+                formatter={(value) => [
+                  `$${Number(value).toLocaleString(undefined, { minimumFractionDigits: 2 })}`,
                   "P&L",
                 ]}
-                labelFormatter={(label: string) => `Date: ${label}`}
+                labelFormatter={(label) => `Date: ${label}`}
               />
               <Line
                 type="monotone"
@@ -90,8 +90,8 @@ export function PnlChart({ reports }: Props) {
                 tickFormatter={(v: number) => `${v}%`}
               />
               <Tooltip
-                formatter={(value: number) => [`${value.toFixed(2)}%`, "Return"]}
-                labelFormatter={(label: string) => `Date: ${label}`}
+                formatter={(value) => [`${Number(value).toFixed(2)}%`, "Return"]}
+                labelFormatter={(label) => `Date: ${label}`}
               />
               <Line
                 type="monotone"
