@@ -1,6 +1,7 @@
 import imaplib
 import email
 from email.header import decode_header
+from email.message import Message
 from datetime import datetime, timedelta, timezone
 from typing import Optional
 import re
@@ -21,7 +22,7 @@ def _decode_subject(raw_subject: str) -> str:
     return "".join(parts)
 
 
-def _get_body(msg: email.message.Message) -> str:
+def _get_body(msg: Message) -> str:
     if msg.is_multipart():
         for part in msg.walk():
             ct = part.get_content_type()
