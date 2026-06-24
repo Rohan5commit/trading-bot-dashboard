@@ -57,21 +57,21 @@ def parse_report(subject: str, body: str) -> dict:
 
     patterns = [
         (
-            r"Unrealized\s+P[&]?L[:\s]*([-+]?\d+\.?\d*)\s*%\s*\(\$([-+]?\d[\d,]*\.?\d*)\)",
+            r"Unrealized\s+P[&]?L(?:\s*\([^)]*\))?[:\s]*([-+]?\d+\.?\d*)\s*%\s*\(\$([-+]?\d[\d,]*\.?\d*)\)",
             lambda m: (
                 result.__setitem__("unrealized_pnl_pct", float(m.group(1))),
                 result.__setitem__("unrealized_pnl_abs", _parse_currency(m.group(2))),
             ),
         ),
         (
-            r"Unrealized\s+P[&]?L[:\s]*\$([-+]?\d[\d,]*\.?\d*)\s*\(([-+]?\d+\.?\d*)\s*%\)",
+            r"Unrealized\s+P[&]?L(?:\s*\([^)]*\))?[:\s]*\$([-+]?\d[\d,]*\.?\d*)\s*\(([-+]?\d+\.?\d*)\s*%\)",
             lambda m: (
                 result.__setitem__("unrealized_pnl_abs", _parse_currency(m.group(1))),
                 result.__setitem__("unrealized_pnl_pct", float(m.group(2))),
             ),
         ),
         (
-            r"Unrealized\s+P[&]?L[:\s]*([-+]?\d[\d,]*\.?\d*)",
+            r"Unrealized\s+P[&]?L(?:\s*\([^)]*\))?[:\s]*([-+]?\d[\d,]*\.?\d*)",
             lambda m: result.__setitem__("unrealized_pnl_abs", _parse_currency(m.group(1))),
         ),
     ]
@@ -95,7 +95,7 @@ def parse_report(subject: str, body: str) -> dict:
         result["open_positions"] = int(open_pos_match.group(1))
 
     capital_match = re.search(
-        r"(?:Current\s+)?Capital\s+Estimate[:\s]*\$?([\d,]+\.?\d*)",
+        r"(?:Current\s+)?(?:Capital\s+Estimate|Portfolio\s+Value)[:\s]*\$?([\d,]+\.?\d*)",
         body,
         re.IGNORECASE,
     )
