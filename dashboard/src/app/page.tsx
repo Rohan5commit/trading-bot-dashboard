@@ -35,8 +35,8 @@ export default function Home() {
   return (
     <div className="max-w-7xl mx-auto px-6 py-8">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-zinc-900">Strategy Overview</h1>
-        <p className="text-zinc-500 mt-1">
+        <h1 className="text-2xl font-bold text-white">Strategy Overview</h1>
+        <p className="text-zinc-400 mt-1">
           Performance summary across all trading strategies
         </p>
       </div>
@@ -48,7 +48,7 @@ export default function Home() {
       )}
 
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg px-4 py-3 text-red-700 text-sm">
+        <div className="bg-red-950 border border-red-800 rounded-lg px-4 py-3 text-red-400 text-sm">
           Error loading data: {error}
         </div>
       )}

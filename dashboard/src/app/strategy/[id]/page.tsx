@@ -52,7 +52,7 @@ export default function StrategyPage() {
   if (error || !strategy) {
     return (
       <div className="max-w-7xl mx-auto px-6 py-8">
-        <div className="bg-red-50 border border-red-200 rounded-lg px-4 py-3 text-red-700 text-sm">
+        <div className="bg-red-950 border border-red-800 rounded-lg px-4 py-3 text-red-400 text-sm">
           {error || "Strategy not found"}
         </div>
       </div>
@@ -64,17 +64,17 @@ export default function StrategyPage() {
       <div className="mb-6">
         <Link
           href="/"
-          className="text-sm text-indigo-600 hover:text-indigo-800"
+          className="text-sm text-indigo-400 hover:text-indigo-300"
         >
           &larr; Back to Overview
         </Link>
       </div>
 
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-zinc-900">
+        <h1 className="text-2xl font-bold text-white">
           {strategy.display_name}
         </h1>
-        <p className="text-zinc-500 mt-1">
+        <p className="text-zinc-400 mt-1">
           {strategy.reports.length} report{strategy.reports.length !== 1 ? "s" : ""}
         </p>
       </div>
@@ -84,7 +84,7 @@ export default function StrategyPage() {
           label="Avg P&L (%)"
           value={formatPercent(strategy.avg_pnl_pct)}
           color={
-            (strategy.avg_pnl_pct ?? 0) >= 0 ? "text-emerald-600" : "text-red-600"
+            (strategy.avg_pnl_pct ?? 0) >= 0 ? "text-emerald-400" : "text-red-400"
           }
         />
         <StatCard
@@ -92,61 +92,61 @@ export default function StrategyPage() {
           value={formatPercent(strategy.avg_return_pct)}
           color={
             (strategy.avg_return_pct ?? 0) >= 0
-              ? "text-emerald-600"
-              : "text-red-600"
+              ? "text-emerald-400"
+              : "text-red-400"
           }
         />
         <StatCard
           label="Best P&L (%)"
           value={formatPercent(strategy.best_pnl_pct)}
-          color="text-emerald-600"
+          color="text-emerald-400"
         />
         <StatCard
           label="Worst P&L (%)"
           value={formatPercent(strategy.worst_pnl_pct)}
-          color="text-red-600"
+          color="text-red-400"
         />
       </div>
 
-      <div className="bg-white rounded-xl border border-zinc-200 p-6 mb-8">
+      <div className="bg-zinc-900 rounded-xl border border-zinc-800 p-6 mb-8">
         <PnlChart reports={strategy.reports} />
       </div>
 
-      <div className="bg-white rounded-xl border border-zinc-200 overflow-hidden">
-        <div className="px-6 py-4 border-b border-zinc-200">
-          <h2 className="text-lg font-semibold text-zinc-900">All Reports</h2>
+      <div className="bg-zinc-900 rounded-xl border border-zinc-800 overflow-hidden">
+        <div className="px-6 py-4 border-b border-zinc-800">
+          <h2 className="text-lg font-semibold text-white">All Reports</h2>
         </div>
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-zinc-200">
-            <thead className="bg-zinc-50">
+          <table className="min-w-full divide-y divide-zinc-800">
+            <thead className="bg-zinc-900">
               <tr>
-                <th className="px-4 py-3 text-left text-xs font-medium text-zinc-500 uppercase">
+                <th className="px-4 py-3 text-left text-xs font-medium text-zinc-400 uppercase">
                   Date
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-zinc-500 uppercase">
+                <th className="px-4 py-3 text-left text-xs font-medium text-zinc-400 uppercase">
                   P&L ($)
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-zinc-500 uppercase">
+                <th className="px-4 py-3 text-left text-xs font-medium text-zinc-400 uppercase">
                   P&L (%)
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-zinc-500 uppercase">
+                <th className="px-4 py-3 text-left text-xs font-medium text-zinc-400 uppercase">
                   Return (%)
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-zinc-500 uppercase">
+                <th className="px-4 py-3 text-left text-xs font-medium text-zinc-400 uppercase">
                   Positions
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-zinc-500 uppercase">
+                <th className="px-4 py-3 text-left text-xs font-medium text-zinc-400 uppercase">
                   Capital
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-zinc-500 uppercase">
+                <th className="px-4 py-3 text-left text-xs font-medium text-zinc-400 uppercase">
                   Email
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-100">
+            <tbody className="divide-y divide-zinc-800">
               {strategy.reports.map((r) => (
-                <tr key={r.id} className="hover:bg-zinc-50">
-                  <td className="px-4 py-3 text-sm text-zinc-700">
+                <tr key={r.id} className="hover:bg-zinc-800">
+                  <td className="px-4 py-3 text-sm text-zinc-300">
                     {r.report_date}
                   </td>
                   <td className="px-4 py-3 text-sm">
@@ -158,10 +158,10 @@ export default function StrategyPage() {
                   <td className="px-4 py-3 text-sm">
                     <PnlValue value={r.total_account_return_pct} suffix="%" />
                   </td>
-                  <td className="px-4 py-3 text-sm text-zinc-600">
+                  <td className="px-4 py-3 text-sm text-zinc-400">
                     {r.open_positions ?? "—"}
                   </td>
-                  <td className="px-4 py-3 text-sm text-zinc-600">
+                  <td className="px-4 py-3 text-sm text-zinc-400">
                     {r.current_capital_estimate
                       ? formatCurrency(r.current_capital_estimate)
                       : "—"}
@@ -169,7 +169,7 @@ export default function StrategyPage() {
                   <td className="px-4 py-3">
                     <button
                       onClick={() => setSelectedReport(r)}
-                      className="text-indigo-600 hover:text-indigo-800 text-sm font-medium"
+                      className="text-indigo-400 hover:text-indigo-300 text-sm font-medium"
                     >
                       View Email
                     </button>
@@ -211,7 +211,7 @@ function StatCard({
   color: string;
 }) {
   return (
-    <div className="bg-white rounded-xl border border-zinc-200 px-4 py-3">
+    <div className="bg-zinc-900 rounded-xl border border-zinc-800 px-4 py-3">
       <div className="text-xs text-zinc-500 mb-1">{label}</div>
       <div className={`text-lg font-semibold ${color}`}>{value}</div>
     </div>
@@ -225,8 +225,8 @@ function PnlValue({
   value: number | null;
   suffix?: string;
 }) {
-  if (value === null) return <span className="text-zinc-400">—</span>;
-  const color = value >= 0 ? "text-emerald-600" : "text-red-600";
+  if (value === null) return <span className="text-zinc-500">—</span>;
+  const color = value >= 0 ? "text-emerald-400" : "text-red-400";
   const formatted = `${value >= 0 ? "+" : ""}${value.toFixed(2)}${suffix}`;
   return <span className={color}>{formatted}</span>;
 }

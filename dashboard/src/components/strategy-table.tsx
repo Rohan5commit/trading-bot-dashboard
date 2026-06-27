@@ -23,19 +23,19 @@ function formatPercent(value: number | null): string {
 }
 
 function PnlCell({ value }: { value: number | null }) {
-  if (value === null) return <span className="text-zinc-400">—</span>;
-  const color = value >= 0 ? "text-emerald-600" : "text-red-600";
+  if (value === null) return <span className="text-zinc-500">—</span>;
+  const color = value >= 0 ? "text-emerald-400" : "text-red-400";
   return <span className={color}>{formatCurrency(value)}</span>;
 }
 
 function ReturnCell({ value }: { value: number | null }) {
-  if (value === null) return <span className="text-zinc-400">—</span>;
-  const color = value >= 0 ? "text-emerald-600" : "text-red-600";
+  if (value === null) return <span className="text-zinc-500">—</span>;
+  const color = value >= 0 ? "text-emerald-400" : "text-red-400";
   return <span className={color}>{formatPercent(value)}</span>;
 }
 
 function MiniSparkline({ data }: { data: { date: string; pnl: number }[] }) {
-  if (!data.length) return <span className="text-zinc-400">—</span>;
+  if (!data.length) return <span className="text-zinc-500">—</span>;
   return (
     <div className="w-24 h-8">
       <ResponsiveContainer width="100%" height="100%">
@@ -43,7 +43,7 @@ function MiniSparkline({ data }: { data: { date: string; pnl: number }[] }) {
           <Line
             type="monotone"
             dataKey="pnl"
-            stroke="#6366f1"
+            stroke="#818cf8"
             strokeWidth={1.5}
             dot={false}
           />
@@ -115,7 +115,7 @@ export function StrategyTable({
     const arrow = active ? (sortDir === "asc" ? " ↑" : " ↓") : "";
     return (
       <th
-        className="px-4 py-3 text-left text-xs font-medium text-zinc-500 uppercase tracking-wider cursor-pointer hover:text-zinc-700 select-none"
+        className="px-4 py-3 text-left text-xs font-medium text-zinc-400 uppercase tracking-wider cursor-pointer hover:text-zinc-200 select-none"
         onClick={() => onSort(field)}
       >
         {children}
@@ -127,31 +127,31 @@ export function StrategyTable({
   return (
     <div>
       <div className="mb-4 flex items-center gap-4">
-        <label className="flex items-center gap-2 text-sm text-zinc-600 cursor-pointer">
+        <label className="flex items-center gap-2 text-sm text-zinc-400 cursor-pointer">
           <input
             type="checkbox"
             checked={positiveOnly}
             onChange={onTogglePositive}
-            className="rounded border-zinc-300"
+            className="rounded border-zinc-600 bg-zinc-800"
           />
           Show only positive P&L
         </label>
       </div>
-      <div className="overflow-x-auto rounded-lg border border-zinc-200">
-        <table className="min-w-full divide-y divide-zinc-200">
-          <thead className="bg-zinc-50">
+      <div className="overflow-x-auto rounded-lg border border-zinc-800">
+        <table className="min-w-full divide-y divide-zinc-800">
+          <thead className="bg-zinc-900">
             <tr>
               <SortHeader field="name">Strategy</SortHeader>
               <SortHeader field="date">Last Date</SortHeader>
               <SortHeader field="pnl">Unrealized P&L ($)</SortHeader>
               <SortHeader field="pnl">Unrealized P&L (%)</SortHeader>
               <SortHeader field="return">Total Return (%)</SortHeader>
-              <th className="px-4 py-3 text-left text-xs font-medium text-zinc-500 uppercase tracking-wider">
+              <th className="px-4 py-3 text-left text-xs font-medium text-zinc-400 uppercase tracking-wider">
                 Trend
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-zinc-100 bg-white">
+          <tbody className="divide-y divide-zinc-800 bg-zinc-950">
             {filtered.length === 0 ? (
               <tr>
                 <td colSpan={6} className="px-4 py-8 text-center text-zinc-500">
@@ -160,19 +160,19 @@ export function StrategyTable({
               </tr>
             ) : (
               filtered.map((s) => (
-                <tr key={s.id} className="hover:bg-zinc-50 transition-colors">
+                <tr key={s.id} className="hover:bg-zinc-900 transition-colors">
                   <td className="px-4 py-3">
                     <Link
                       href={`/strategy/${s.id}`}
-                      className="text-indigo-600 hover:text-indigo-800 font-medium"
+                      className="text-indigo-400 hover:text-indigo-300 font-medium"
                     >
                       {s.display_name}
                     </Link>
-                    <div className="text-xs text-zinc-400 mt-0.5">
+                    <div className="text-xs text-zinc-500 mt-0.5">
                       {s.report_count} report{s.report_count !== 1 ? "s" : ""}
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-sm text-zinc-600">
+                  <td className="px-4 py-3 text-sm text-zinc-400">
                     {s.latest_report_date ?? "—"}
                   </td>
                   <td className="px-4 py-3 text-sm">
