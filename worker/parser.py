@@ -83,6 +83,46 @@ def parse_report(subject: str, body: str) -> dict:
             extractor(match)
             break
 
+    # Fallback patterns for Microsoft Trading Bot format
+    if result["unrealized_pnl_pct"] is None and result["unrealized_pnl_abs"] is None:
+        msft_pnl_match = re.search(
+            r"Total\s+P[&]?L[:\s]*\$?([-+]?\d[\d,]*\.?\d*)",
+            body,
+            re.IGNORECASE,
+        )
+        if msft_pnl_match:
+            result["unrealized_pnl_abs"] = _parse_currency(msft_pnl_match.group(1))
+
+        msft_return_match = re.search(
+            r"Cumulative\s+Return[:\s]*([-+]?\d+\.?\d*)\s*%",
+            body,
+            re.IGNORECASE,
+        )
+        if msft_return_match:
+            result["total_account_return_pct"] = float(msft_return_match.group(1))
+            if result["unrealized_pnl_pct"] is None:
+                result["unrealized_pnl_pct"] = float(msft_return_match.group(1))
+
+    # Fallback patterns for Kalshi Sports Bot format (value on line above label)
+    if result["unrealized_pnl_pct"] is None and result["unrealized_pnl_abs"] is None:
+        kalshi_pnl_match = re.search(
+            r"\$([-+]?\d[\d,]*\.?\d*)\s*\n\s*Demo\s+P[&]?L",
+            body,
+            re.IGNORECASE,
+        )
+        if kalshi_pnl_match:
+            result["unrealized_pnl_abs"] = _parse_currency(kalshi_pnl_match.group(1))
+
+        kalshi_return_match = re.search(
+            r"([-+]?\d+\.?\d*)\s*%\s*\n\s*Return\s*\(vs[^)]*\)",
+            body,
+            re.IGNORECASE,
+        )
+        if kalshi_return_match:
+            result["total_account_return_pct"] = float(kalshi_return_match.group(1))
+            if result["unrealized_pnl_pct"] is None:
+                result["unrealized_pnl_pct"] = float(kalshi_return_match.group(1))
+
     return_match = re.search(
         r"TOTAL\s+ACCOUNT\s+RETURN[:\s]*([-+]?\d+\.?\d*)\s*%",
         body,
