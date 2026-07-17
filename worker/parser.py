@@ -11,6 +11,7 @@ STRATEGY_MAP = {
     "kalshi sports bot": {"name": "kalshi_sports_bot", "display_name": "Kalshi Sports Bot"},
     "kronos report": {"name": "kronos", "display_name": "Kronos"},
     "microsoft trading bot": {"name": "microsoft_trading_bot", "display_name": "Microsoft Trading Bot"},
+    "brain topology model": {"name": "brain_topology_model", "display_name": "Brain Topology Model"},
     "(Momentum)": {"name": "trading_bot_momentum", "display_name": "Trading Bot Momentum"},
     "(Value)": {"name": "trading_bot_value", "display_name": "Trading Bot Value"},
     "(Scalp)": {"name": "trading_bot_scalp", "display_name": "Trading Bot Scalp"},
