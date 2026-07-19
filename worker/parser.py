@@ -46,7 +46,24 @@ def _parse_currency(value: str) -> Optional[float]:
         return None
 
 
-def parse_report(subject: str, body: str) -> dict:
+def _detect_error(body: str) -> bool:
+    lines = body.split("\n")
+    for line in lines:
+        stripped = line.strip()
+        # Skip empty lines and CSS/style lines
+        if not stripped or stripped.startswith(("{", "}", ".", "#", "pre ", "body ", "h1", "h2", "table", "th ", "td ", "tr.", ".stat", ".pnl")):
+            continue
+        # Skip the "Errors" section header and "No errors" messages
+        if re.match(r"^Errors$", stripped, re.IGNORECASE):
+            continue
+        if re.match(r"^No errors", stripped, re.IGNORECASE):
+            continue
+        # Detect actual error indicators
+        if re.search(r"\bError\b", stripped) and not re.match(r"^No\s+error", stripped, re.IGNORECASE):
+            return True
+        if re.search(r"Traceback|NameError|ValueError|TypeError|KeyError|Exception|ImportError|RuntimeError", stripped):
+            return True
+    return False
     result = {
         "strategy": infer_strategy(subject),
         "report_date": extract_date_from_subject(subject),
@@ -55,7 +72,7 @@ def parse_report(subject: str, body: str) -> dict:
         "total_account_return_pct": None,
         "open_positions": None,
         "current_capital_estimate": None,
-        "has_error": re.search(r"error", body, re.IGNORECASE) is not None,
+        "has_error": _detect_error(body),
     }
 
     patterns = [
