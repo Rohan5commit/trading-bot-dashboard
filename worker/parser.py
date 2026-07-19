@@ -55,6 +55,7 @@ def parse_report(subject: str, body: str) -> dict:
         "total_account_return_pct": None,
         "open_positions": None,
         "current_capital_estimate": None,
+        "has_error": re.search(r"error", body, re.IGNORECASE) is not None,
     }
 
     patterns = [

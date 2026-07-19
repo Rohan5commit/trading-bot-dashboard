@@ -74,13 +74,14 @@ def run_sync(dry_run: bool = False):
                 parsed_count += 1
 
                 logger.info(
-                    "Parsed: subject='%s' strategy=%s date=%s pnl_pct=%s pnl_abs=%s return=%s",
+                    "Parsed: subject='%s' strategy=%s date=%s pnl_pct=%s pnl_abs=%s return=%s has_error=%s",
                     em["subject"][:60],
                     parsed["strategy"]["name"],
                     parsed["report_date"],
                     parsed["unrealized_pnl_pct"],
                     parsed["unrealized_pnl_abs"],
                     parsed["total_account_return_pct"],
+                    parsed["has_error"],
                 )
 
                 if conn:
@@ -103,6 +104,7 @@ def run_sync(dry_run: bool = False):
                         open_positions=parsed["open_positions"],
                         current_capital_estimate=parsed["current_capital_estimate"],
                         raw_body=em["body"],
+                        has_error=parsed["has_error"],
                     )
                     logger.info("Upserted report for strategy '%s'", parsed["strategy"]["name"])
 

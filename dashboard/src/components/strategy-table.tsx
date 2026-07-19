@@ -168,6 +168,11 @@ export function StrategyTable({
                     >
                       {s.display_name}
                     </Link>
+                    {s.has_error && (
+                      <span className="ml-2 inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-amber-900/50 text-amber-400 border border-amber-700/50">
+                        Warning
+                      </span>
+                    )}
                     <div className="text-xs text-zinc-500 mt-0.5">
                       {s.report_count} report{s.report_count !== 1 ? "s" : ""}
                     </div>

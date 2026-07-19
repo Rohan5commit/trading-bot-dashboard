@@ -35,6 +35,7 @@ def upsert_report(
     open_positions: Optional[int],
     current_capital_estimate: Optional[float],
     raw_body: str,
+    has_error: bool = False,
 ):
     with conn.cursor() as cur:
         cur.execute(
@@ -44,13 +45,13 @@ def upsert_report(
                 from_email, to_email,
                 unrealized_pnl_pct, unrealized_pnl_abs,
                 total_account_return_pct, open_positions,
-                current_capital_estimate, raw_body
+                current_capital_estimate, raw_body, has_error
             ) VALUES (
                 %s, %s, %s, %s,
                 %s, %s,
                 %s, %s,
                 %s, %s,
-                %s, %s
+                %s, %s, %s
             )
             ON CONFLICT (message_id) DO UPDATE SET
                 report_date = EXCLUDED.report_date,
@@ -62,7 +63,8 @@ def upsert_report(
                 total_account_return_pct = EXCLUDED.total_account_return_pct,
                 open_positions = EXCLUDED.open_positions,
                 current_capital_estimate = EXCLUDED.current_capital_estimate,
-                raw_body = EXCLUDED.raw_body
+                raw_body = EXCLUDED.raw_body,
+                has_error = EXCLUDED.has_error
             """,
             (
                 strategy_id,
@@ -77,6 +79,7 @@ def upsert_report(
                 open_positions,
                 current_capital_estimate,
                 raw_body,
+                has_error,
             ),
         )
         return cur.rowcount

@@ -79,6 +79,15 @@ export default function StrategyPage() {
         </p>
       </div>
 
+      {strategy.reports.some((r) => r.has_error) && (
+        <div className="mb-6 bg-amber-950/50 border border-amber-700/50 rounded-lg px-4 py-3 text-amber-400 text-sm flex items-center gap-2">
+          <svg className="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+          </svg>
+          <span>One or more reports contain errors. Check the report details below.</span>
+        </div>
+      )}
+
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         <StatCard
           label="Avg P&L (%)"
@@ -124,6 +133,9 @@ export default function StrategyPage() {
                   Date
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-zinc-400 uppercase">
+                  Status
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-zinc-400 uppercase">
                   P&L ($)
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-zinc-400 uppercase">
@@ -148,6 +160,18 @@ export default function StrategyPage() {
                 <tr key={r.id} className="hover:bg-zinc-800">
                   <td className="px-4 py-3 text-sm text-zinc-300">
                     {r.report_date}
+                  </td>
+                  <td className="px-4 py-3 text-sm">
+                    {r.has_error ? (
+                      <span className="inline-flex items-center gap-1 text-amber-400">
+                        <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                        </svg>
+                        Error
+                      </span>
+                    ) : (
+                      <span className="text-emerald-400">OK</span>
+                    )}
                   </td>
                   <td className="px-4 py-3 text-sm">
                     <PnlValue value={r.unrealized_pnl_abs} />
@@ -179,7 +203,7 @@ export default function StrategyPage() {
               {strategy.reports.length === 0 && (
                 <tr>
                   <td
-                    colSpan={7}
+                    colSpan={8}
                     className="px-4 py-8 text-center text-zinc-500"
                   >
                     No reports found

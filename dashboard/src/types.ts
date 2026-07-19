@@ -20,6 +20,7 @@ export interface Report {
   open_positions: number | null;
   current_capital_estimate: number | null;
   raw_body: string;
+  has_error: boolean;
   created_at: string;
 }
 
@@ -30,6 +31,7 @@ export interface StrategyWithMetrics extends Strategy {
   latest_total_account_return_pct: number | null;
   report_count: number;
   recent_pnl: { date: string; pnl: number }[];
+  has_error: boolean;
 }
 
 export interface StrategyDetail extends Strategy {

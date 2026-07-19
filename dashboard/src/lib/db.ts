@@ -16,6 +16,7 @@ export async function getAllStrategies(): Promise<StrategyWithMetrics[]> {
           unrealized_pnl_pct,
           unrealized_pnl_abs,
           total_account_return_pct,
+          has_error,
           ROW_NUMBER() OVER (PARTITION BY strategy_id ORDER BY report_date DESC) AS rn
         FROM reports
       ),
@@ -36,6 +37,7 @@ export async function getAllStrategies(): Promise<StrategyWithMetrics[]> {
         lr.unrealized_pnl_pct AS latest_unrealized_pnl_pct,
         lr.unrealized_pnl_abs AS latest_unrealized_pnl_abs,
         lr.total_account_return_pct AS latest_total_account_return_pct,
+        lr.has_error,
         COALESCE(ss.report_count, 0) AS report_count
       FROM strategies s
       LEFT JOIN latest_reports lr ON lr.strategy_id = s.id AND lr.rn = 1
