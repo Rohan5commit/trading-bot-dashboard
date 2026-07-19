@@ -64,6 +64,9 @@ def _detect_error(body: str) -> bool:
         if re.search(r"Traceback|NameError|ValueError|TypeError|KeyError|Exception|ImportError|RuntimeError", stripped):
             return True
     return False
+
+
+def parse_report(subject: str, body: str) -> dict:
     result = {
         "strategy": infer_strategy(subject),
         "report_date": extract_date_from_subject(subject),
