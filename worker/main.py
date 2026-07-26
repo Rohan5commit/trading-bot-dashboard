@@ -67,11 +67,16 @@ def run_sync(dry_run: bool = False):
 
         parsed_count = 0
         error_count = 0
+        upserted_count = 0
 
         for em in emails:
             try:
                 parsed = parse_report(em["subject"], em["body"])
                 parsed_count += 1
+
+                if parsed["report_date"] is None:
+                    logger.warning("Skipping email with no date: '%s'", em["subject"][:60])
+                    continue
 
                 logger.info(
                     "Parsed: subject='%s' strategy=%s date=%s pnl_pct=%s pnl_abs=%s return=%s has_error=%s",
@@ -106,17 +111,23 @@ def run_sync(dry_run: bool = False):
                         raw_body=em["body"],
                         has_error=parsed["has_error"],
                     )
+                    conn.commit()
+                    upserted_count += 1
                     logger.info("Upserted report for strategy '%s'", parsed["strategy"]["name"])
 
             except Exception as e:
                 error_count += 1
                 logger.error("Failed to process email '%s': %s", em.get("subject", "?"), e)
+                if conn:
+                    try:
+                        conn.rollback()
+                    except Exception:
+                        pass
 
         if conn:
-            conn.commit()
             conn.close()
 
-        logger.info("Sync complete: %d parsed, %d errors", parsed_count, error_count)
+        logger.info("Sync complete: %d fetched, %d parsed, %d upserted, %d errors", len(emails), parsed_count, upserted_count, error_count)
 
     finally:
         client.close()
