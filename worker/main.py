@@ -49,6 +49,7 @@ def run_sync(dry_run: bool = False):
         use_tls=config["imap_use_tls"],
     )
 
+    conn = None
     try:
         client.connect()
         emails = client.fetch_matching_emails(
@@ -61,7 +62,6 @@ def run_sync(dry_run: bool = False):
             logger.info("No matching emails found.")
             return
 
-        conn = None
         if not dry_run:
             conn = get_connection()
 
@@ -124,12 +124,14 @@ def run_sync(dry_run: bool = False):
                     except Exception:
                         pass
 
-        if conn:
-            conn.close()
-
         logger.info("Sync complete: %d fetched, %d parsed, %d upserted, %d errors", len(emails), parsed_count, upserted_count, error_count)
 
     finally:
+        if conn:
+            try:
+                conn.close()
+            except Exception:
+                pass
         client.close()
 
 

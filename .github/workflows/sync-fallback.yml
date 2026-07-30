@@ -6,6 +6,14 @@ on:
     - cron: '0 */4 * * *'
   workflow_dispatch:
 
+permissions:
+  actions: write
+  contents: read
+
+concurrency:
+  group: sync-fallback
+  cancel-in-progress: false
+
 jobs:
   check-and-sync:
     runs-on: ubuntu-latest
@@ -21,13 +29,20 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               workflow_id: 'sync.yml',
-              per_page: 5,
+              per_page: 20,
             });
             const todayRun = runs.data.workflow_runs.find(r =>
               r.created_at.startsWith(today) && r.conclusion === 'success'
             );
             if (todayRun) {
               console.log(`Sync already ran today: ${todayRun.id}`);
+              return 'skip';
+            }
+            const inProgress = runs.data.workflow_runs.find(r =>
+              r.created_at.startsWith(today) && r.status === 'in_progress'
+            );
+            if (inProgress) {
+              console.log(`Sync already in progress: ${inProgress.id}`);
               return 'skip';
             }
             console.log('No successful sync today, triggering...');
@@ -38,10 +53,11 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
+            const branch = context.payload.repository?.default_branch || 'main';
             await github.rest.actions.createWorkflowDispatch({
               owner: context.repo.owner,
               repo: context.repo.repo,
               workflow_id: 'sync.yml',
-              ref: 'main',
+              ref: branch,
             });
-            console.log('Sync triggered successfully');
+            console.log(`Sync triggered on branch: ${branch}`);

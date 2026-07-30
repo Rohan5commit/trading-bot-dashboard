@@ -81,12 +81,13 @@ class IMAPClient:
         self.conn: Optional[imaplib.IMAP4_SSL | imaplib.IMAP4] = None
 
     def connect(self):
+        timeout = 30
         if self.use_tls:
-            self.conn = imaplib.IMAP4_SSL(self.host, self.port)
+            self.conn = imaplib.IMAP4_SSL(self.host, self.port, timeout=timeout)
         else:
-            self.conn = imaplib.IMAP4(self.host, self.port)
+            self.conn = imaplib.IMAP4(self.host, self.port, timeout=timeout)
         self.conn.login(self.user, self.password)
-        logger.info("Connected to %s:%d as %s", self.host, self.port, self.user)
+        logger.info("Connected to %s:%d as %s (timeout=%ds)", self.host, self.port, self.user, timeout)
 
     def close(self):
         if self.conn:
