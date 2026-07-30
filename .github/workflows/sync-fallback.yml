@@ -1,0 +1,47 @@
+name: Sync Fallback (ensure daily run)
+
+on:
+  schedule:
+    # Run every 4 hours as a safety net
+    - cron: '0 */4 * * *'
+  workflow_dispatch:
+
+jobs:
+  check-and-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if sync ran today
+        id: check
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const now = new Date();
+            const today = now.toISOString().split('T')[0];
+            const runs = await github.rest.actions.listWorkflowRuns({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'sync.yml',
+              per_page: 5,
+            });
+            const todayRun = runs.data.workflow_runs.find(r =>
+              r.created_at.startsWith(today) && r.conclusion === 'success'
+            );
+            if (todayRun) {
+              console.log(`Sync already ran today: ${todayRun.id}`);
+              return 'skip';
+            }
+            console.log('No successful sync today, triggering...');
+            return 'trigger';
+
+      - name: Trigger sync
+        if: steps.check.outputs.result == 'trigger'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'sync.yml',
+              ref: 'main',
+            });
+            console.log('Sync triggered successfully');
